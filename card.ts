@@ -1,11 +1,14 @@
-import * as _ from "lodash";
+import * as _ from 'lodash';
+import {MAX_CARDS_IN_HAND} from './const'
 
-class Card {
+export class Card {
+    cost
     name
     temporary
 
-    constructor(name: 'attack', temporary = false) {
+    constructor(name: string, cost: number, temporary = false) {
         this.name = name
+        this.cost = cost
         this.temporary = temporary
     }
 
@@ -14,94 +17,51 @@ class Card {
     }
 }
 
-class Deck {
-    cards: Card[] = []
 
-    add(c: Card) {
-        this.cards.push(c)
-    }
+// class CardConstructor {
+//     private effects: effect[] = []
+//
+//     cost(cost: number) {
+//         return this
+//     }
+//
+//     effectDamage(amount: number) {
+//         this.effects.push({type: 'damage', amount: amount})
+//         return this
+//     }
+//
+//     effectDefense(number: number) {
+//         this.effects.push({type: 'defense', amount: number})
+//         return this
+//     }
+//
+//     build() {
+//         return undefined;
+//     }
+// }
 
-    copy() {
-        return _.cloneDeep(this.cards)
-    }
-}
+// Deal 7 damage. Increase defense by 4.
 
-
-const MAX_CARDS_IN_HAND = 5
-
-class GameDeck {
-    private discardPile: Card[] = []
-    private hand: Card[] = []
-
-    constructor(private drawPile: Card[]) {
-    }
-
-    draw(count: number) {
-
-        for (let i = 0; i < count; i++) {
-            if (this.hand.length >= MAX_CARDS_IN_HAND) {
-                console.log('hand is full')
-                return
-            }
-
-            if (this.drawPile.length == 0) {
-                // Attempt to reshuffle deck
-                if (this.discardPile.length == 0) {
-                    console.error('no cards to draw')
-                    return
-                }
-
-                this.drawPile = this.discardPile
-                this.discardPile = []
-                return
-            }
-
-            // Move card from draw pile to hand
-            let c = this.drawPile.pop()
-            if (!c) {
-                throw new Error("unexpected state of draw pile")
-            }
-            this.hand.push(c)
-        }
-    }
-
-    print() {
-        console.log('STATE')
-        console.log(`drawPile    [${this.drawPile}]`)
-        console.log(`hand        [${this.hand}]`)
-        console.log(`discardPile [${this.discardPile}]`)
-    }
-
-    play(i: number) {
-        if(i >= this.hand.length) {
-            console.log('invalid index', i)
-            return
-        }
-        let c = this.hand[i]
-        this.hand.splice(i, 1);
-
-        this.discardPile.push(c)
-    }
-}
+// let c: Card = new CardConstructor()
+//     .cost(1)
+//     .effectDamage(7)
+//     .effectDefense(3)
+//     .build()
 
 
-class Attack extends Card {
-    constructor() {
-        super('attack');
-    }
-}
-
-let deck = new Deck()
-let a = new Attack()
-deck.add(new Attack())
-deck.add(new Attack())
-deck.add(new Attack())
-deck.add(new Attack())
-
-let gameDeck = new GameDeck(deck.copy())
-gameDeck.draw(3)
-gameDeck.play(1)
-gameDeck.print()
+//
+//
+//
+// let creator = new CardConstructor()
+// deck.add(creator.new('strike'))
+//
+//
+// let a = new Attack()
+// deck.add(new Attack())
+// deck.add(new Attack())
+// deck.add(new Attack())
+// deck.add(new Attack())
+//
 
 // Card
 /*
